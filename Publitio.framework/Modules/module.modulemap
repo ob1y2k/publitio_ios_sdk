@@ -1,0 +1,11 @@
+framework module Publitio {
+  umbrella header "Publitio.h"
+
+  export *
+  module * { export * }
+}
+
+module Publitio.Swift {
+    header "Publitio-Swift.h"
+    requires objc
+}

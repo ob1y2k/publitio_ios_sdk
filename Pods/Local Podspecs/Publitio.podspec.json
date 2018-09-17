@@ -1,0 +1,20 @@
+{
+  "name": "Publitio",
+  "version": "1.0.0",
+  "summary": "This framework provides API's for publitio.",
+  "description": "The knob control is a completely customizable widget that can be used in any iOS app. It also plays a little victory fanfare.",
+  "homepage": "https://www.galaxyweblinks.com/",
+  "authors": {
+    "Name": "Imran.malik@galaxyweblinks.in"
+  },
+  "license": "MIT",
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source": {
+    "git": "https://github.com/imranGalaxy/Publitios.git",
+    "tag": "1.0.0"
+  },
+  "vendored_frameworks": "Publitio.framework",
+  "swift_version": "4.1"
+}
