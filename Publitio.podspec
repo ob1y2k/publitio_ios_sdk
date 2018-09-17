@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 
-s.name         = "PublitioIOSSDK"
+s.name         = "Publitio"
 s.version      = "1.0.0"
 s.summary      = "Publitio is Video and Image API built for developers by developers."
 s.description  =  <<-DESC
