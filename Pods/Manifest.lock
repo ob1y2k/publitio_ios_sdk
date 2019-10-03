@@ -1,5 +1,5 @@
 PODS:
-  - Publitio (1.0.0)
+  - Publitio (1.1)
 
 DEPENDENCIES:
   - Publitio (from `./`)
@@ -9,8 +9,8 @@ EXTERNAL SOURCES:
     :path: "./"
 
 SPEC CHECKSUMS:
-  Publitio: fdc410d549aac0d0d516b07189db57f053bb409d
+  Publitio: 31216cba2807c86a9f5e4c914478796d6cce7c8f
 
-PODFILE CHECKSUM: 3aec602cedb0b13d56b19cb060b4b93fbad6b73a
+PODFILE CHECKSUM: 5c5b7170760b51997f86790e3174a0995c455bdc
 
 COCOAPODS: 1.8.0.beta.1
