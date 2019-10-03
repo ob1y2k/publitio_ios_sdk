@@ -1,20 +1,19 @@
 //
 //  ViewController.swift
-//  Demo
+//  PublitIO Test
 //
-//  Created by GWL on 04/09/18.
-//  Copyright © 2018 GWL. All rights reserved.
+//  Created by gwl on 10/09/19.
+//  Copyright © 2019 gwl. All rights reserved.
 //
 
 import UIKit
-import MobileCoreServices
 import Publitio
-
-class ViewController: UIViewController {
+import AVKit
+class FilesController: UIViewController {
     
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var indicatorView: UIActivityIndicatorView!
-    
+    var selectedButton: SelectedButton = .none
     let imagePicker = UIImagePickerController()
     
     
@@ -29,7 +28,7 @@ class ViewController: UIViewController {
     //MARK:- Action for showing list of all files
     @IBAction func actionList(_ sender: Any) {
         indicatorView.startAnimating()
-        Publitio.shared.filesFetchList(limit: nil, offset: nil, order: nil, filterPrivacy: nil, filterExtensions: nil, filterType: nil, filterAd: nil, tag: nil) { (success, result) in
+        Publitio.shared.filesFetchList(limit: nil, offset: nil, order: nil, filterPrivacy: nil, filterExtensions: .mp3, filterType: .audio, filterAd: nil, tag: nil) { (success, result) in
             if success {
                 DispatchQueue.main.async {
                     self.indicatorView.stopAnimating()
@@ -154,13 +153,7 @@ class ViewController: UIViewController {
         
         self.present(alertController, animated: true, completion: nil)
     }
-    
-    
-    
-    
-    
-    
-    
+
     
     //MARK:-  Action for creating a file
     @IBAction func createFile(_ sender: Any) {
@@ -181,12 +174,17 @@ class ViewController: UIViewController {
             self.openPhotoLibrary()
         }
         
+        let audio = UIAlertAction(title: "Audio", style: .default) { _ in
+            self.uploadAudio()
+        }
+        
         let cancel = UIAlertAction(title: "Cancel", style: .destructive) { _ in
             
         }
         
         alert.addAction(camera)
         alert.addAction(gallary)
+        alert.addAction(audio)
         alert.addAction(cancel)
         
         if let presenter = alert.popoverPresentationController {
@@ -197,6 +195,32 @@ class ViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
+    @IBAction func compresssAction(_ sender: Any) {
+        if let button = sender as? UIButton, let selecedBtn = SelectedButton(rawValue: button.tag) {
+            selectedButton = selecedBtn
+            guard let viewRect = sender as? UIView else {
+                return
+            }
+            let alert = UIAlertController(title: "Select Source", message: "", preferredStyle: .actionSheet)
+            let camera = UIAlertAction(title: "Camera", style: .default) { _ in
+                self.openCamera()
+            }
+            let gallary = UIAlertAction(title: "Photos", style: .default) { _ in
+                self.openPhotoLibrary()
+            }
+            let cancel = UIAlertAction(title: "Cancel", style: .destructive) { _ in
+                
+            }
+            alert.addAction(camera)
+            alert.addAction(gallary)
+            alert.addAction(cancel)
+            if let presenter = alert.popoverPresentationController {
+                presenter.sourceView = viewRect;
+                presenter.sourceRect = viewRect.bounds;
+            }
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
     
     func openCamera() {
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
@@ -207,7 +231,9 @@ class ViewController: UIViewController {
         imagePicker.sourceType = .camera
         imagePicker.cameraDevice = .rear
         imagePicker.delegate = self
-        imagePicker.mediaTypes = [kUTTypeImage as String, kUTTypeMovie as String]
+        //imagePicker.mediaTypes = [kUTTypeImage as String, kUTTypeMovie as String]
+        imagePicker.mediaTypes = ["public.image", "public.movie"]
+        imagePicker.videoQuality = .typeIFrame1280x720
         present(imagePicker, animated: true)
     }
     
@@ -220,8 +246,24 @@ class ViewController: UIViewController {
         
         imagePicker.sourceType = .photoLibrary
         imagePicker.delegate = self
-        imagePicker.mediaTypes = [kUTTypeImage as String, kUTTypeMovie as String]
+        imagePicker.mediaTypes = ["public.image", "public.movie"]
         present(imagePicker, animated: true)
+    }
+    
+    
+    func uploadAudio() {
+        guard let path = Bundle.main.path(forResource: "song", ofType: "mp3") else {
+            assertionFailure("No audio found with this name")
+            return
+        }
+        self.indicatorView.startAnimating()
+        Publitio.shared.filesCreate(localMediaPath: path, mimeType: .mp3, fileUrl: nil, publicId: nil, title: "testAudio", description: "This is for test purpose only", tags: nil, privacy: nil, optionDownload: nil, optionTransform: false, optionAd: .enabled) { (success, result) in
+            DispatchQueue.main.async {
+                print(success,result)
+                self.textView.text = result!.debugDescription
+                self.indicatorView.stopAnimating()
+            }
+        }
     }
     
     
@@ -253,69 +295,111 @@ class ViewController: UIViewController {
         }
         
     }
+    
+   /* func compressVideo(videoUrl: URL)  {
+        self.indicatorView.startAnimating()
+        Publitio.shared.compressVideo(videoLocation: videoUrl, videoQuality: .qualitylow) { (isSuccess, compressedObj, errorString ) in
+            DispatchQueue.main.async {
+                if isSuccess, let compressedObject = compressedObj {
+                    print(compressedObj?.compressedVideoLoaction)
+                    // self.textView.text = compressedObject.compressedVideoLoaction
+                    self.indicatorView.stopAnimating()
+                    self.playCompressedVideo(compressedObj: compressedObject)
+                } else {
+                    self.indicatorView.stopAnimating()
+                    print(errorString)
+                }
+                
+            }
+        }
+    }*/
+    
+    func playCompressedVideo(compressedObj: CompressedModel) {
+        let alert = UIAlertController.init(title: "Message", message: "Do you want to play compressed Video?", preferredStyle: .alert)
+        let okAction = UIAlertAction.init(title: "Ok", style: .default) { (action) in
+            if let locationStr = compressedObj.compressedVideoLoaction {
+                let videoUrl = URL(fileURLWithPath: locationStr)
+                let player = AVPlayer(url: videoUrl)
+                let vc = AVPlayerViewController()
+                vc.player = player
+                self.present(vc, animated: true) {
+                    vc.player?.play()
+                }
+            }
+        }
+        let cancelAction = UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil)
+        alert.addAction(okAction)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true, completion: nil)
+    }
 }
 
 
-
-
-extension ViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+extension FilesController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         defer {
             picker.dismiss(animated: true)
         }
-        
-        if let mediaType = info[UIImagePickerControllerMediaType] as? String {
-            
-            if mediaType  == "public.image" {
-                
-                //                if let url = info[UIImagePickerControllerReferenceURL] as? URL {
-                //                    self.indicatorView.startAnimating()
-                //                    Publitio.shared.filesCreate(localMediaPath: url.path, mimeType: .png) { (success, result) in
-                //                        DispatchQueue.main.async {
-                //                            self.textView.text = result!.debugDescription
-                //                            self.indicatorView.stopAnimating()
-                //                        }
-                //                    }
-                //                }else
-                
-                if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-                    
-                    let data = UIImageJPEGRepresentation(image, 0.3)!
-                    self.indicatorView.startAnimating()
-                    self.saveImageFile(name: "image.jpg", data: data) { (error, url) in
+        if let mediaType = info[.mediaType] as? String,  self.selectedButton == .compress {
+            //  if mediaType == "public.movie" {
+            self.indicatorView.startAnimating()
+            if let url = info[.mediaURL] as? URL {
+                print(url)
+                //self.compressVideo(videoUrl: url)
+                Publitio.shared.filesCreateWithCompression(localMediaPath: url, videoQuality: .quality960x540, mimeType: .mov, fileUrl: nil, publicId: nil, title: nil, description: nil, tags: nil, privacy: nil, optionDownload: nil, optionTransform: nil, optionAd: nil, completion: { (success, result) in
+                    DispatchQueue.main.async {
+                        print(success,result)
+                        self.textView.text = result!.debugDescription
+                        self.indicatorView.stopAnimating()
+                       // playCompressedVideo(compressedObj: res)
+                    }
+                })
+            }
+            //            }
+        } else {
+            if let mediaType = info[.mediaType] as? String {
+                if mediaType  == "public.image" {
+                    if let image = info[.originalImage] as? UIImage {
                         
-                        if let url = url {
+                        guard let data = image.jpegData(compressionQuality:0.3) else {
+                            return
+                        }
+                        self.indicatorView.startAnimating()
+                        self.saveImageFile(name: "image.jpg", data: data) { (error, url) in
+                            if let url = url {
+                             
+                                Publitio.shared.filesCreate(localMediaPath: url.path, mimeType: .png, fileUrl: nil, publicId: nil, title: nil, description: nil, tags: nil, privacy: nil, optionDownload: nil, optionTransform: nil, optionAd: nil, completion: { (success, result) in
+                                    DispatchQueue.main.async {
+                                        print(success,result)
+                                        self.textView.text = result!.debugDescription
+                                        self.indicatorView.stopAnimating()
+                                    }
+                                })
+                            }
+                            else{
+                                self.indicatorView.stopAnimating()
+                            }
                             
-                            Publitio.shared.filesCreate(localMediaPath: url.path, mimeType: .png, fileUrl: nil, publicId: nil, title: nil, description: nil, tags: nil, privacy: nil, optionDownload: nil, optionTransform: nil, optionAd: nil, completion: { (success, result) in
-                                DispatchQueue.main.async {
-                                    self.textView.text = result!.debugDescription
-                                    self.indicatorView.stopAnimating()
-                                }
-                            })
                         }
-                        else{
-                            self.indicatorView.stopAnimating()
-                        }
-                        
+                    }
+                } else if mediaType == "public.movie" {
+                    if let url = info[.mediaURL] as? URL {
+                           print(url)
+                        self.indicatorView.startAnimating()
+                        Publitio.shared.filesCreate(localMediaPath: url.path, mimeType: .mov, fileUrl: nil, publicId: nil, title: nil, description: nil, tags: nil, privacy: nil, optionDownload: nil, optionTransform: nil, optionAd: nil, completion: { (success, result) in
+                            DispatchQueue.main.async {
+                                print(success,result)
+                                self.textView.text = result!.debugDescription
+                                self.indicatorView.stopAnimating()
+                            }
+                        })
                     }
                 }
             }
-            if mediaType == "public.movie" {
-                
-                if let url = info[UIImagePickerControllerMediaURL] as? URL {
-                    self.indicatorView.startAnimating()
-                    
-                    Publitio.shared.filesCreate(localMediaPath: url.path, mimeType: .mov, fileUrl: nil, publicId: nil, title: nil, description: nil, tags: nil, privacy: nil, optionDownload: nil, optionTransform: nil, optionAd: nil, completion: { (success, result) in
-                        DispatchQueue.main.async {
-                            self.textView.text = result!.debugDescription
-                            self.indicatorView.stopAnimating()
-                        }
-                    })
-                }
-            }
         }
-        
     }
+    
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         defer {
@@ -327,3 +411,13 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
 }
 
 
+
+enum SelectedButton:Int {
+    case none = 0
+    case create
+    case list
+    case show
+    case update
+    case delete
+    case compress
+}
