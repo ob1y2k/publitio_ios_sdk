@@ -6,11 +6,11 @@ You can find POD file
 ```php
 iOS: https://cocoapods.org/pods/Publitio
 ```
-You want to add pod 'Publitio', '~> 1.1' similar to the following to your Podfile:
+You want to add pod 'Publitio', '~> 1.2' similar to the following to your Podfile:
 
 ```php
 target 'MyApp' do
-pod 'Publitio', '~> 1.1'
+pod 'Publitio', '~> 1.2'
 end
 ```
 
