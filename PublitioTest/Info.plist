@@ -20,12 +20,12 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>PublitioAPIKey</key>
+	<string>zcoTG9uSiRrt41kVHhPM</string>
+	<key>PublitioAPISecret</key>
+	<string>QWb3NMXbhMl3X6p5MnXa2XcxVJRalHzM</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
-	<key>PublitioAPIKey</key>
-	<string>fVc03mG5oaJs5myHsS4S</string>
-	<key>PublitioAPISecret</key>
-	<string>XpcaaRNtBp4XAJ2gLgv4MzQPxbAWR4ts</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>

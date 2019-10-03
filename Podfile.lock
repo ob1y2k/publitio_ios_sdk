@@ -2,21 +2,15 @@ PODS:
   - Publitio (1.0.0)
 
 DEPENDENCIES:
-  - Publitio (from `https://github.com/imranGalaxy/Publitios.git`, tag `1.0.0`)
+  - Publitio (from `./`)
 
 EXTERNAL SOURCES:
   Publitio:
-    :git: https://github.com/imranGalaxy/Publitios.git
-    :tag: 1.0.0
-
-CHECKOUT OPTIONS:
-  Publitio:
-    :git: https://github.com/imranGalaxy/Publitios.git
-    :tag: 1.0.0
+    :path: "./"
 
 SPEC CHECKSUMS:
-  Publitio: 40c8bf400260c456b5cbb70ff9f02be891caca5f
+  Publitio: fdc410d549aac0d0d516b07189db57f053bb409d
 
-PODFILE CHECKSUM: 8edbf9b0a46937b91984c8c2f500527c627a9d20
+PODFILE CHECKSUM: 3aec602cedb0b13d56b19cb060b4b93fbad6b73a
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.8.0.beta.1
