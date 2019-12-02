@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
 s.name         = "Publitio"
-s.version      = "1.2"
+s.version      = "1.4"
 s.summary      = "Publitio is Video and Image API built for developers by developers."
 s.description  =  <<-DESC
 
@@ -20,7 +20,6 @@ s.author            = { 'Publitio' => 'info@publit.io' }
 s.license      = "MIT"
 s.platform     = :ios, "8.0"
 s.source       = { :git => "https://github.com/ob1y2k/publitio_ios_sdk.git", :tag => s.version }
-#s.source_files = "Publitio/**/*"
 s.vendored_frameworks = "Publitio.framework"
 s.swift_version = "5.0" 
 

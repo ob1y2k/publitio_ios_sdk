@@ -1,16 +1,16 @@
 PODS:
-  - Publitio (1.1)
+  - Publitio (1.4)
 
 DEPENDENCIES:
-  - Publitio (from `./`)
+  - Publitio (from `../publitio_ios_sdk`)
 
 EXTERNAL SOURCES:
   Publitio:
-    :path: "./"
+    :path: "../publitio_ios_sdk"
 
 SPEC CHECKSUMS:
-  Publitio: 31216cba2807c86a9f5e4c914478796d6cce7c8f
+  Publitio: 9a13a44b292e6abfe1971743c46769e41449c06c
 
-PODFILE CHECKSUM: 5c5b7170760b51997f86790e3174a0995c455bdc
+PODFILE CHECKSUM: 3ff663b0d099acf478d3116f861039f3c325676e
 
-COCOAPODS: 1.8.0.beta.1
+COCOAPODS: 1.8.4
