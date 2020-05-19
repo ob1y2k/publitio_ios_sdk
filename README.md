@@ -52,7 +52,7 @@ File Create > Upload
 {"success":true,"code":201,"message":"File uploaded","id":"i0haVus5","public_id":null,"title":"IMG_20180924_125120","description":"","tags":"","type":"image","extension":"jpg","size":200602,"width":960,"height":1280,"privacy":"public","option_download":"disabled","option_ad":"enabled","option_transform":"disabled","wm_id":null,"url_preview":"https://media.publit.io/file/i0haVus5.jpg","versions":0,"hits":0,"created_at":"2018-10-01 11:43:44","updated_at":"2018-10-01 11:43:44"}d_at":"2018-10-01 11:38:21","updated_at":"2018-10-01 11:38:21"}
 
 Or visit link for preaty version
-https://jsonblob.com/4f5f2fdb-c56f-11e8-a5bc-f94935ae111a
+You can access the blob directly at https://jsonblob.com/c7b16a16-998e-11ea-b9dd-cf035d80aa95
 ```
 
 File List files
